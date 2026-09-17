@@ -1,11 +1,9 @@
 
 import {sql,poolPromise} from '../Config/supabase'
 import {Response,Request} from 'express'
-import bcrypt from 'bcrypt'
+import { HashearPassword, VerificarPassword } from '../Utils/Bcrypt'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import { Usuario, TokenPayload } from '../Interface/Tabla'
-
-const SALT_ROUNDS = 10;
 
 // --->Funcion de Registro de Usuarios
 
@@ -31,7 +29,7 @@ export async function RegistrarUsuario(req:Request,res:Response){
         }
 
         // --> Guardamos la contraseña hasheada, nunca en texto plano
-        const hash=await bcrypt.hash(password,SALT_ROUNDS);
+        const hash=await HashearPassword(String(password));
 
         await pool.request()
         .input('usuario',sql.VarChar,usuario)
@@ -72,7 +70,7 @@ export async function Login(req:Request,res:Response){
         const User=Resultado.recordset[0];
 
         // --> Mismo mensaje para usuario inexistente o contraseña incorrecta
-        if(!User || !(await bcrypt.compare(password,User.password))){
+        if(!User || !(await VerificarPassword(String(password),User.password))){
             return res.status(401).json({error:'Usuario o Contraseña Incorrectos'})
         }
 
