@@ -1,0 +1,13 @@
+import { Router } from "express";
+import {RegistrarProductos,ModificarProducto,EliminarProducto}from '../Controller/Productos'
+import { VerificarToken } from "../Middleware/Auth";
+
+const Rutas=Router()
+
+// --> Solo usuarios logueados pueden modificar productos
+Rutas.post('/Registrar',VerificarToken,RegistrarProductos)
+Rutas.put('/Modificar/:id',VerificarToken,ModificarProducto)
+Rutas.delete('/Eliminar/:id',VerificarToken,EliminarProducto)
+
+
+export default Rutas
