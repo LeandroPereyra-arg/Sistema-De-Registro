@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Diagramas</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; color: #1a1a1a; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  svg { display: block; margin: 0 auto; }
+  .p1 svg { width: 100%; height: auto; }
+  .p2 svg { height: 186mm; width: auto; max-width: 100%; }
+  text { font-family: "DejaVu Sans", Arial, Helvetica, sans-serif; fill: #1a1a1a; }
+</style></head>
+<body>
+
+<div class="page p1">
+<svg viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#1a1a1a" stroke-width="1.4"/>
+    </marker>
+  </defs>
+
+  <text x="0" y="24" font-size="20" font-weight="bold">1 · Diagrama de Casos de Uso — Sistema de Registro</text>
+  <text x="0" y="46" font-size="12" fill="#555">Actor: Admin · CRUD de Productos sobre la tabla Tarjetas (SQL Server)</text>
+
+  <rect x="200" y="70" width="580" height="470" fill="none" stroke="#333" stroke-width="1.5"/>
+  <text x="490" y="96" font-size="14" font-weight="bold" text-anchor="middle">Sistema de Registro (Gestión de Productos)</text>
+
+  <g stroke="#1a1a1a" stroke-width="1.6" fill="none">
+    <circle cx="80" cy="292" r="14"/>
+    <line x1="80" y1="306" x2="80" y2="350"/>
+    <line x1="56" y1="320" x2="104" y2="320"/>
+    <line x1="80" y1="350" x2="60" y2="384"/>
+    <line x1="80" y1="350" x2="100" y2="384"/>
+  </g>
+  <text x="80" y="404" font-size="13" font-weight="bold" text-anchor="middle">Admin</text>
+
+  <g stroke="#1a1a1a" stroke-width="1.2">
+    <line x1="104" y1="320" x2="285" y2="150"/>
+    <line x1="104" y1="320" x2="285" y2="250"/>
+    <line x1="104" y1="320" x2="285" y2="350"/>
+    <line x1="104" y1="320" x2="285" y2="450"/>
+  </g>
+
+  <ellipse cx="390" cy="150" rx="105" ry="32" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="390" y="155" font-size="13" text-anchor="middle">Iniciar Sesión</text>
+
+  <ellipse cx="390" cy="250" rx="105" ry="32" fill="#d5e8d4" stroke="#82b366" stroke-width="1.8"/>
+  <text x="390" y="255" font-size="13" font-weight="bold" text-anchor="middle">Registrar Producto</text>
+
+  <ellipse cx="390" cy="350" rx="105" ry="32" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="390" y="355" font-size="13" text-anchor="middle">Modificar Producto</text>
+
+  <ellipse cx="390" cy="450" rx="105" ry="32" fill="#fff" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="390" y="455" font-size="13" text-anchor="middle">Eliminar Producto</text>
+
+  <ellipse cx="635" cy="350" rx="93" ry="34" fill="#fff" stroke="#1a1a1a" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text x="635" y="346" font-size="13" text-anchor="middle">Validar Token (JWT)</text>
+  <text x="635" y="364" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Middleware/Auth.ts</text>
+
+  <g stroke="#1a1a1a" stroke-width="1.2" stroke-dasharray="6 4" marker-end="url(#open)">
+    <line x1="495" y1="250" x2="552" y2="325"/>
+    <line x1="495" y1="350" x2="538" y2="350"/>
+    <line x1="495" y1="450" x2="552" y2="375"/>
+  </g>
+  <text x="530" y="288" font-size="10" font-style="italic" fill="#555">«include»</text>
+  <text x="500" y="342" font-size="10" font-style="italic" fill="#555">«include»</text>
+  <text x="530" y="420" font-size="10" font-style="italic" fill="#555">«include»</text>
+
+  <rect x="200" y="565" width="580" height="52" fill="#fbfbf3" stroke="#999" stroke-width="1"/>
+  <text x="212" y="586" font-size="11.5">Caso de uso desarrollado: <tspan font-weight="bold">Registrar Producto</tspan> · Endpoint real: POST /api/Registrar</text>
+  <text x="212" y="604" font-size="11.5">Server/src/Router/Productos.route.ts → Server/src/Controller/Productos.ts → tabla Tarjetas</text>
+</svg>
+</div>
+
+<div class="page p2">
+<svg viewBox="0 0 1140 810" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="full" viewBox="0 0 10 10" refX="9.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+    <marker id="ret" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#1a1a1a" stroke-width="1.4"/>
+    </marker>
+    <marker id="retred" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10" fill="none" stroke="#b85450" stroke-width="1.4"/>
+    </marker>
+  </defs>
+
+  <text x="0" y="22" font-size="19" font-weight="bold">2 · Diagrama de Secuencia — Registrar Producto (CRUD: Create)</text>
+  <text x="0" y="42" font-size="11.5" fill="#555">Admin → Frontend (React) → Router/Middleware → Controller → Base de Datos SQL Server</text>
+
+  <g stroke="#1a1a1a" stroke-width="1.5" fill="none">
+    <circle cx="90" cy="72" r="11"/>
+    <line x1="90" y1="83" x2="90" y2="110"/>
+    <line x1="72" y1="93" x2="108" y2="93"/>
+    <line x1="90" y1="110" x2="76" y2="130"/>
+    <line x1="90" y1="110" x2="104" y2="130"/>
+  </g>
+  <text x="90" y="147" font-size="12" font-weight="bold" text-anchor="middle">Admin</text>
+
+  <g fill="#fff" stroke="#1a1a1a" stroke-width="1.4">
+    <rect x="200" y="58" width="200" height="62"/>
+    <rect x="430" y="58" width="200" height="62"/>
+    <rect x="660" y="58" width="200" height="62"/>
+    <rect x="890" y="58" width="200" height="62"/>
+  </g>
+
+  <text x="300" y="78" font-size="11.5" font-weight="bold" text-anchor="middle">Frontend (Componente React)</text>
+  <text x="300" y="95" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Client/src/components/</text>
+  <text x="300" y="110" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Productos.tsx *</text>
+
+  <text x="530" y="78" font-size="11.5" font-weight="bold" text-anchor="middle">Router + Middleware</text>
+  <text x="530" y="95" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Router/Productos.route.ts</text>
+  <text x="530" y="110" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Middleware/Auth.ts</text>
+
+  <text x="760" y="78" font-size="11.5" font-weight="bold" text-anchor="middle">Controller</text>
+  <text x="760" y="95" font-size="10" font-style="italic" text-anchor="middle" fill="#555">Controller/Productos.ts</text>
+  <text x="760" y="110" font-size="10" font-style="italic" text-anchor="middle" fill="#555">RegistrarProductos()</text>
+
+  <text x="990" y="78" font-size="11.5" font-weight="bold" text-anchor="middle">Base de Datos</text>
+  <text x="990" y="95" font-size="10" font-style="italic" text-anchor="middle" fill="#555">SQL Server (mssql)</text>
+  <text x="990" y="110" font-size="10" font-style="italic" text-anchor="middle" fill="#555">tabla Tarjetas</text>
+
+  <g stroke="#777" stroke-width="1.2" stroke-dasharray="7 5">
+    <line x1="90" y1="155" x2="90" y2="775"/>
+    <line x1="300" y1="120" x2="300" y2="775"/>
+    <line x1="530" y1="120" x2="530" y2="775"/>
+    <line x1="760" y1="120" x2="760" y2="775"/>
+    <line x1="990" y1="120" x2="990" y2="775"/>
+  </g>
+
+  <text x="0" y="178" font-size="12" font-weight="bold" fill="#3f7f3f">FLUJO NORMAL</text>
+
+  <text x="96" y="197" font-size="11">1. Carga los datos del producto</text>
+  <line x1="90" y1="203" x2="300" y2="203" stroke="#1a1a1a" stroke-width="1.4" marker-end="url(#full)"/>
+
+  <text x="306" y="228" font-size="11">2. POST /api/Registrar</text>
+  <text x="306" y="243" font-size="10">body: { codigo, nombre, descripcion, talle, precio, stock, imagen }</text>
+  <text x="306" y="257" font-size="10">header: Authorization: Bearer &lt;token&gt;  (services/auth.ts → authHeader())</text>
+  <line x1="300" y1="264" x2="530" y2="264" stroke="#1a1a1a" stroke-width="1.4" marker-end="url(#full)"/>
+
+  <text x="536" y="292" font-size="11">3. VerificarToken(req.headers.authorization) → next()</text>
+  <path d="M530,300 L610,300 L610,330 L536,330" fill="none" stroke="#1a1a1a" stroke-width="1.4" marker-end="url(#full)"/>
+
+  <text x="536" y="365" font-size="11">4. RegistrarProductos(req, res)</text>
+  <line x1="530" y1="372" x2="760" y2="372" stroke="#1a1a1a" stroke-width="1.4" marker-end="url(#full)"/>
+
+  <text x="766" y="404" font-size="11">5. INSERT INTO Tarjetas</text>
+  <text x="766" y="418" font-size="9.5">(@codigo, @nombre, @descripcion, @talle, @precio, @stock, @imagen)</text>
+  <line x1="760" y1="425" x2="990" y2="425" stroke="#1a1a1a" stroke-width="1.4" marker-end="url(#full)"/>
+
+  <text x="984" y="455" font-size="11" text-anchor="end">6. rowsAffected = 1</text>
+  <line x1="990" y1="462" x2="760" y2="462" stroke="#1a1a1a" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#ret)"/>
+
+  <text x="306" y="497" font-size="11">7. status 201 { Mensaje: 'Productos Registrado' }</text>
+  <line x1="760" y1="504" x2="300" y2="504" stroke="#1a1a1a" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#ret)"/>
+
+  <text x="96" y="537" font-size="11">8. Muestra el mensaje de éxito y limpia el formulario</text>
+  <line x1="300" y1="544" x2="90" y2="544" stroke="#1a1a1a" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#ret)"/>
+
+  <rect x="120" y="565" width="1000" height="205" fill="none" stroke="#1a1a1a" stroke-width="1.4"/>
+  <path d="M120,565 L182,565 L182,581 L166,591 L120,591 z" fill="#f2f2f2" stroke="#1a1a1a" stroke-width="1.4"/>
+  <text x="130" y="582" font-size="11.5" font-weight="bold">alt</text>
+  <text x="120" y="557" font-size="12" font-weight="bold" fill="#b85450">FLUJOS ALTERNATIVOS</text>
+
+  <text x="132" y="608" font-size="11" font-style="italic">[ Token ausente, inválido o expirado ]</text>
+  <text x="306" y="624" font-size="11" fill="#b85450">A1. status 401 { error: 'Token Invalido o Expirado' }</text>
+  <line x1="530" y1="631" x2="300" y2="631" stroke="#b85450" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#retred)"/>
+  <line x1="120" y1="643" x2="1120" y2="643" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <text x="132" y="662" font-size="11" font-style="italic">[ Falta codigo o nombre en el body ]</text>
+  <text x="306" y="678" font-size="11" fill="#b85450">A2. status 400 { Mensaje: 'Debe Completar los campos de Codigo y Nombre para continuar' }</text>
+  <line x1="760" y1="685" x2="300" y2="685" stroke="#b85450" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#retred)"/>
+  <line x1="120" y1="697" x2="1120" y2="697" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <text x="132" y="716" font-size="11" font-style="italic">[ Error en la Base de Datos ]</text>
+  <text x="984" y="730" font-size="11" fill="#b85450" text-anchor="end">Excepción SQL (catch)</text>
+  <line x1="990" y1="737" x2="760" y2="737" stroke="#b85450" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#retred)"/>
+  <text x="306" y="756" font-size="11" fill="#b85450">A3. status 500 { error: 'Error al Cargar la Base de Datos' }</text>
+  <line x1="760" y1="763" x2="300" y2="763" stroke="#b85450" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#retred)"/>
+
+  <text x="0" y="795" font-size="10" fill="#555">* Productos.tsx todavía no existe en el repositorio (hoy solo está Login.tsx); el token lo aporta Client/src/services/auth.ts → authHeader().</text>
+</svg>
+</div>
+
+</body></html>

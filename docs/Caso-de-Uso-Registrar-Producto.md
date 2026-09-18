@@ -1,7 +1,13 @@
 # Caso de Uso: Registrar Producto
 
-Diagramas: [`Caso-de-Uso-Registrar-Producto.drawio`](./Caso-de-Uso-Registrar-Producto.drawio)
-(abrir en <https://app.diagrams.net> — hoja 1: caso de uso, hoja 2: diagrama de secuencia).
+**Diagramas**
+
+- PDF listo para entregar: [`Caso-de-Uso-Registrar-Producto.pdf`](./Caso-de-Uso-Registrar-Producto.pdf)
+  (hoja 1: diagrama de casos de uso · hoja 2: diagrama de secuencia).
+- Editable draw.io: [`Caso-de-Uso-Registrar-Producto.drawio`](./Caso-de-Uso-Registrar-Producto.drawio)
+  (abrir en <https://app.diagrams.net>; mismas 2 hojas).
+- Fuente del PDF: [`Caso-de-Uso-Registrar-Producto.html`](./Caso-de-Uso-Registrar-Producto.html)
+  (se imprime a PDF desde el navegador: A4 horizontal, sin encabezados).
 
 | | |
 |---|---|
@@ -34,3 +40,12 @@ Diagramas: [`Caso-de-Uso-Registrar-Producto.drawio`](./Caso-de-Uso-Registrar-Pro
 | A3 | Error al conectar o escribir en la base de datos | **500** `{ error: 'Error al Cargar la Base de Datos' }` |
 
 En los tres casos no se registra el producto y el Frontend muestra el mensaje de error recibido.
+
+## Nota sobre los componentes
+
+Los nombres del backend son los reales del repositorio (`Server/src/Router/Productos.route.ts`,
+`Server/src/Middleware/Auth.ts`, `Server/src/Controller/Productos.ts` → `RegistrarProductos()`,
+`Server/src/Config/supabase.TS` con `mssql`).
+Del lado del Cliente hoy **solo existe `Client/src/components/Login.tsx`**: el componente
+`Productos.tsx` del diagrama es el que falta crear para consumir `POST /api/Registrar`.
+El token ya lo resuelve `Client/src/services/auth.ts` con `authHeader()`.
