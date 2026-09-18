@@ -1,0 +1,205 @@
+<mxfile host="app.diagrams.net" agent="Claude Code" type="device">
+  <diagram id="casodeuso" name="1 - Caso de Uso">
+    <mxGraphModel dx="1100" dy="700" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="sys" value="Sistema de Registro - Gestion de Productos" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=14;fontStyle=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="520" height="480" as="geometry" />
+        </mxCell>
+
+        <mxCell id="admin" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="230" width="40" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc1" value="Iniciar Sesion" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="90" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc2" value="Registrar Producto" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="250" y="190" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc3" value="Modificar Producto" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="290" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc4" value="Eliminar Producto" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="390" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc5" value="Validar Token (JWT)" style="ellipse;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="290" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a1" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="uc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="uc2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="uc3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="uc4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="i1" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=10;dashed=1;html=1;rounded=0;fontSize=11;" edge="1" parent="1" source="uc2" target="uc5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i2" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=10;dashed=1;html=1;rounded=0;fontSize=11;" edge="1" parent="1" source="uc3" target="uc5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i3" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=10;dashed=1;html=1;rounded=0;fontSize=11;" edge="1" parent="1" source="uc4" target="uc5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nota" value="Caso de uso desarrollado: &lt;b&gt;Registrar Producto&lt;/b&gt;&lt;br&gt;(ver flujos en el .md y el diagrama de secuencia)" style="shape=note;whiteSpace=wrap;html=1;size=14;align=left;spacingLeft=6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="200" y="550" width="280" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="secuencia" name="2 - Diagrama de Secuencia">
+    <mxGraphModel dx="1400" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="titulo" value="Caso de Uso: Registrar Producto (CRUD - Create)" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="95" y="0" width="600" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lfAdmin" value="Admin" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;outlineConnect=0;participant=umlActor;size=60;" vertex="1" parent="1">
+          <mxGeometry x="95" y="40" width="60" height="740" as="geometry" />
+        </mxCell>
+        <mxCell id="lfFront" value="Frontend&lt;br&gt;&lt;i&gt;Client/src/components&lt;/i&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;outlineConnect=0;size=60;" vertex="1" parent="1">
+          <mxGeometry x="250" y="40" width="190" height="740" as="geometry" />
+        </mxCell>
+        <mxCell id="lfRouter" value="Router + Middleware&lt;br&gt;&lt;i&gt;Server/src/Router&lt;br&gt;Server/src/Middleware&lt;/i&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;outlineConnect=0;size=60;" vertex="1" parent="1">
+          <mxGeometry x="470" y="40" width="190" height="740" as="geometry" />
+        </mxCell>
+        <mxCell id="lfCtrl" value="Controller&lt;br&gt;&lt;i&gt;Server/src/Controller&lt;br&gt;Productos.ts&lt;/i&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;outlineConnect=0;size=60;" vertex="1" parent="1">
+          <mxGeometry x="690" y="40" width="190" height="740" as="geometry" />
+        </mxCell>
+        <mxCell id="lfDb" value="Base de Datos&lt;br&gt;&lt;i&gt;SQL Server - tabla Tarjetas&lt;/i&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;outlineConnect=0;size=60;" vertex="1" parent="1">
+          <mxGeometry x="910" y="40" width="190" height="740" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flujoN" value="FLUJO NORMAL" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#3F7F3F;" vertex="1" parent="1">
+          <mxGeometry x="95" y="120" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="m1" value="1. Completa el formulario y presiona Guardar" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="125" y="160" as="sourcePoint" />
+            <mxPoint x="345" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m2" value="2. POST /api/Registrar&lt;br&gt;body: {codigo, nombre, descripcion, talle, precio, stock, imagen}&lt;br&gt;header: Authorization: Bearer &amp;lt;token&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="215" as="sourcePoint" />
+            <mxPoint x="565" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m3" value="3. VerificarToken(Authorization)" style="html=1;align=left;spacingLeft=6;verticalAlign=middle;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="245" as="sourcePoint" />
+            <mxPoint x="565" y="285" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="645" y="245" />
+              <mxPoint x="645" y="285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m4" value="4. RegistrarProductos(req, res)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="320" as="sourcePoint" />
+            <mxPoint x="785" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m5" value="5. INSERT INTO Tarjetas&lt;br&gt;(@codigo, @nombre, @descripcion, @talle, @precio, @stock, @imagen)" style="html=1;verticalAlign=bottom;endArrow=block;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="785" y="375" as="sourcePoint" />
+            <mxPoint x="1005" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m6" value="6. rowsAffected = 1" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1005" y="415" as="sourcePoint" />
+            <mxPoint x="785" y="415" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m7" value="7. status 201 { Mensaje: 'Producto Registrado' }" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="785" y="460" as="sourcePoint" />
+            <mxPoint x="345" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="m8" value="8. Muestra mensaje de exito y limpia el formulario" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="500" as="sourcePoint" />
+            <mxPoint x="125" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="frame" value="alt - FLUJOS ALTERNATIVOS" style="shape=umlFrame;whiteSpace=wrap;html=1;width=190;height=26;fillColor=none;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="530" width="1040" height="235" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c1" value="[ Token ausente, invalido o expirado ]" style="text;html=1;align=left;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="70" y="560" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" value="A1. status 401 { error: 'Token Invalido o Expirado' }" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;strokeColor=#B85450;fontColor=#B85450;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="595" as="sourcePoint" />
+            <mxPoint x="345" y="595" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d1" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="610" as="sourcePoint" />
+            <mxPoint x="1100" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="c2" value="[ Falta codigo o nombre ]" style="text;html=1;align=left;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="70" y="615" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="A2. status 400 { Mensaje: 'Debe Completar los campos de Codigo y Nombre' }" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;strokeColor=#B85450;fontColor=#B85450;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="785" y="650" as="sourcePoint" />
+            <mxPoint x="345" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d2" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="665" as="sourcePoint" />
+            <mxPoint x="1100" y="665" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="c3" value="[ Error en la Base de Datos ]" style="text;html=1;align=left;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="70" y="670" width="300" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="a3b" value="Excepcion SQL" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;strokeColor=#B85450;fontColor=#B85450;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1005" y="705" as="sourcePoint" />
+            <mxPoint x="785" y="705" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a3" value="A3. status 500 { error: 'Error al Cargar la Base de Datos' }" style="html=1;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;rounded=0;fontSize=11;strokeColor=#B85450;fontColor=#B85450;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="785" y="745" as="sourcePoint" />
+            <mxPoint x="345" y="745" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

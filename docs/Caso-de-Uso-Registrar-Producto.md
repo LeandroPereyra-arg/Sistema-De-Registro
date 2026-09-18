@@ -1,0 +1,36 @@
+# Caso de Uso: Registrar Producto
+
+Diagramas: [`Caso-de-Uso-Registrar-Producto.drawio`](./Caso-de-Uso-Registrar-Producto.drawio)
+(abrir en <https://app.diagrams.net> — hoja 1: caso de uso, hoja 2: diagrama de secuencia).
+
+| | |
+|---|---|
+| **Actor** | Admin (usuario logueado) |
+| **Objetivo** | Dar de alta un producto en la tabla `Tarjetas` |
+| **Precondición** | El Admin inició sesión y el navegador guardó el token JWT (`localStorage`) |
+| **Postcondición** | El producto queda registrado en la base de datos |
+| **Endpoint** | `POST /api/Registrar` (protegido por `VerificarToken`) |
+
+## Flujo Normal
+
+1. El Admin completa el formulario y presiona **Guardar**.
+2. El Frontend (`Client/src/components`) envía `POST /api/Registrar` con
+   `{ codigo, nombre, descripcion, talle, precio, stock, imagen }` y el header
+   `Authorization: Bearer <token>`.
+3. El middleware `VerificarToken` (`Server/src/Middleware/Auth.ts`) valida el token y llama a `next()`.
+4. El router (`Server/src/Router/Productos.route.ts`) invoca `RegistrarProductos(req, res)`.
+5. El controlador (`Server/src/Controller/Productos.ts`) ejecuta el `INSERT INTO Tarjetas`
+   con los parámetros `@codigo, @nombre, @descripcion, @talle, @precio, @stock, @imagen`.
+6. SQL Server confirma la inserción.
+7. El backend responde **201** `{ Mensaje: 'Producto Registrado' }`.
+8. El Frontend muestra el mensaje de éxito y limpia el formulario.
+
+## Flujos Alternativos
+
+| # | Condición | Respuesta |
+|---|---|---|
+| A1 | Token ausente, inválido o expirado | **401** `{ error: 'Token Invalido o Expirado' }` (o `'Debe Iniciar Sesion para continuar'`) |
+| A2 | Falta `codigo` o `nombre` | **400** `{ Mensaje: 'Debe Completar los campos de Codigo y Nombre para continuar' }` |
+| A3 | Error al conectar o escribir en la base de datos | **500** `{ error: 'Error al Cargar la Base de Datos' }` |
+
+En los tres casos no se registra el producto y el Frontend muestra el mensaje de error recibido.
