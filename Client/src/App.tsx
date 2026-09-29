@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Login from './components/Login'
+import Productos from './components/Productos'
 import { getUsuario, logout, type Usuario } from './services/auth'
 
 function App() {
@@ -10,19 +11,24 @@ function App() {
   }
 
   return (
-    <main className="login">
-      <div className="login-card">
-        <h1>Bienvenido, {usuario.usuario}</h1>
-        <button
-          onClick={() => {
-            logout()
-            setUsuario(null)
-          }}
-        >
-          Cerrar Sesión
-        </button>
-      </div>
-    </main>
+    <>
+      <header className="barra">
+        <h1>Productos</h1>
+        <div>
+          <span>Hola, {usuario.usuario}</span>
+          <button
+            className="secundario"
+            onClick={() => {
+              logout()
+              setUsuario(null)
+            }}
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </header>
+      <Productos />
+    </>
   )
 }
 

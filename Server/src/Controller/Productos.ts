@@ -2,6 +2,22 @@
 import {sql,poolPromise} from '../Config/supabase'
 import {Response,Request} from 'express'
 
+// --->Funcion de Listado de Productos
+
+export async function ListarProductos(req:Request,res:Response){
+    try{
+        const pool= await poolPromise;
+        const Resultado=await pool.request()
+        .query('SELECT id,codigo,nombre,descripcion,talle,precio,stock,imagen FROM Tarjetas ORDER BY id DESC')
+
+        return res.status(200).json(Resultado.recordset)
+    }
+    catch(error){
+        console.error('No se logro listar los Productos')
+        return res.status(500).json({error:'Error al Cargar la Base de Datos'})
+    }
+}
+
 export async function RegistrarProductos(req:Request,res:Response){
     try{
         const {codigo,nombre,descripcion,talle,precio,stock,imagen}=req.body;
