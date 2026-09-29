@@ -1,0 +1,1182 @@
+{
+	"info": {
+		"_postman_id": "a66afc9f-ba74-445a-a2cb-fdec69ce54c2",
+		"name": "Sistema de Registro - API",
+		"description": "Tests de la API del Sistema de Registro (Auth + CRUD de Productos).\n\nEjecutar la coleccion completa con el Collection Runner, en orden: cada carpeta usa las variables que guarda la anterior (usuario, token, codigo, productoId).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// --> Test comun a todos los request",
+					"pm.test(\"Responde en menos de 2 segundos\", () => pm.expect(pm.response.responseTime).to.be.below(2000));",
+					"pm.test(\"Responde JSON\", () => pm.response.to.be.json);"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "1 - Auth",
+			"description": "Registro de usuarios, Login (guarda el Token en la variable {{token}}) y Perfil.",
+			"item": [
+				{
+					"name": "Registrar Usuario - OK",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// --> Genera un usuario unico en cada corrida para no chocar con registros anteriores",
+									"const sufijo = Date.now();",
+									"pm.collectionVariables.set(\"usuario\", \"postman_\" + sufijo);",
+									"pm.collectionVariables.set(\"email\", \"postman_\" + sufijo + \"@test.com\");",
+									"pm.collectionVariables.set(\"password\", \"Clave123\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 201 - Usuario creado\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Devuelve el mensaje de registro\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.include(\"Usuario Registrado\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{usuario}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Registrar Usuario - Duplicado (409)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 409 - Usuario ya registrado\", () => pm.response.to.have.status(409));",
+									"pm.test(\"Devuelve el error de duplicado\", () => {",
+									"    pm.expect(pm.response.json().error).to.eql(\"El Usuario o Email ya se encuentra registrado\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{usuario}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Registrar Usuario - Faltan datos (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 400 - Faltan datos\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Devuelve el mensaje de validacion\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.eql(\"Debe Completar Usuario, Email y Contraseña para continuar\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"sin_email\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Registrar Usuario - Contraseña corta (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 400 - Contraseña corta\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Pide al menos 6 caracteres\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.eql(\"La Contraseña debe tener al menos 6 caracteres\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"corta\",\n  \"email\": \"corta@test.com\",\n  \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Login - Contraseña incorrecta (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Credenciales invalidas\", () => pm.response.to.have.status(401));",
+									"pm.test(\"No devuelve Token\", () => pm.expect(pm.response.json().token).to.be.undefined);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Login"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{usuario}}\",\n  \"password\": \"incorrecta\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Login - Faltan datos (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 400 - Faltan datos\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Login"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{usuario}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Login - OK (guarda el Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200 - Login exitoso\", () => pm.response.to.have.status(200));",
+									"const respuesta = pm.response.json();",
+									"pm.test(\"Devuelve un Token JWT\", () => {",
+									"    pm.expect(respuesta.token).to.be.a(\"string\");",
+									"    pm.expect(respuesta.token.split(\".\")).to.have.lengthOf(3);",
+									"});",
+									"pm.test(\"Devuelve el usuario sin la contraseña\", () => {",
+									"    pm.expect(respuesta.usuario.usuario).to.eql(pm.collectionVariables.get(\"usuario\"));",
+									"    pm.expect(respuesta.usuario).to.not.have.property(\"password\");",
+									"});",
+									"// --> El Token se usa en todas las rutas protegidas",
+									"pm.collectionVariables.set(\"token\", respuesta.token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Login"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{usuario}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Login - Con Email (200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200 - Se puede ingresar con el Email\", () => pm.response.to.have.status(200));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Login"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuario\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Perfil - Con Token (200)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Devuelve el usuario del Token\", () => {",
+									"    pm.expect(pm.response.json().usuario.usuario).to.eql(pm.collectionVariables.get(\"usuario\"));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Perfil",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Perfil"
+							]
+						}
+					}
+				},
+				{
+					"name": "Perfil - Sin Token (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Debe iniciar sesion\", () => pm.response.to.have.status(401));",
+									"pm.test(\"Devuelve el error de sesion\", () => {",
+									"    pm.expect(pm.response.json().error).to.eql(\"Debe Iniciar Sesion para continuar\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Auth/Perfil",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Auth",
+								"Perfil"
+							]
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2 - Productos",
+			"description": "Alta y listado de productos. Guarda el id del producto creado en {{productoId}}.",
+			"item": [
+				{
+					"name": "Registrar Producto - Sin Token (401)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// --> Codigo unico para el producto de esta corrida",
+									"pm.collectionVariables.set(\"codigo\", \"PM-\" + Date.now());"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Ruta protegida\", () => pm.response.to.have.status(401));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize\",\n  \"descripcion\": \"Remera de algodon peinado\",\n  \"talle\": \"M\",\n  \"precio\": 15000,\n  \"stock\": 10,\n  \"imagen\": \"https://ejemplo.com/remera.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Registrar Producto - Faltan Codigo y Nombre (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 400 - Faltan datos obligatorios\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Devuelve el mensaje de validacion\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.eql(\"Debe Completar los campos de Codigo y Nombre para continuar\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"descripcion\": \"Sin codigo ni nombre\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Registrar Producto - OK (201)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 201 - Producto creado\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Devuelve el mensaje de registro\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.include(\"Productos Registrado\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Registrar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Registrar"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize\",\n  \"descripcion\": \"Remera de algodon peinado\",\n  \"talle\": \"M\",\n  \"precio\": 15000,\n  \"stock\": 10,\n  \"imagen\": \"https://ejemplo.com/remera.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Listar Productos - Contiene el nuevo (guarda el id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Devuelve una lista\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));",
+									"",
+									"const buscado = pm.response.json().find(p => p.codigo === pm.collectionVariables.get(\"codigo\"));",
+									"",
+									"pm.test(\"El producto registrado aparece en la lista\", () => {",
+									"    pm.expect(buscado, \"producto con el codigo \" + pm.collectionVariables.get(\"codigo\")).to.be.an(\"object\");",
+									"    pm.expect(buscado.nombre).to.eql(\"Remera Oversize\");",
+									"    pm.expect(Number(buscado.precio)).to.eql(15000);",
+									"    pm.expect(buscado.stock).to.eql(10);",
+									"});",
+									"// --> El id se usa para Modificar y Eliminar",
+									"if (buscado) pm.collectionVariables.set(\"productoId\", buscado.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Productos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Productos"
+							]
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3 - Modificar Producto",
+			"description": "Pruebas del metodo Modificar Producto (PUT /api/Modificar/:id).",
+			"item": [
+				{
+					"name": "Modificar Producto - Sin Token (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Ruta protegida\", () => pm.response.to.have.status(401));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Modificar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Modificar",
+								"{{productoId}}"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize Negra\",\n  \"descripcion\": \"Remera de algodon peinado - color negro\",\n  \"talle\": \"L\",\n  \"precio\": 18000.5,\n  \"stock\": 4,\n  \"imagen\": \"https://ejemplo.com/remera-negra.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Modificar Producto - Token invalido (401)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// --> Se reemplaza el Token solo para este request",
+									"pm.request.headers.upsert({ key: \"Authorization\", value: \"Bearer token.invalido.123\" });"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Token invalido\", () => pm.response.to.have.status(401));",
+									"pm.test(\"Devuelve el error de Token\", () => {",
+									"    pm.expect(pm.response.json().error).to.eql(\"Token Invalido o Expirado\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Modificar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Modificar",
+								"{{productoId}}"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize Negra\",\n  \"descripcion\": \"Remera de algodon peinado - color negro\",\n  \"talle\": \"L\",\n  \"precio\": 18000.5,\n  \"stock\": 4,\n  \"imagen\": \"https://ejemplo.com/remera-negra.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Modificar Producto - Faltan Codigo y Nombre (400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 400 - Faltan datos obligatorios\", () => pm.response.to.have.status(400));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Modificar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Modificar",
+								"{{productoId}}"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"precio\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Modificar Producto - Inexistente (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 404 - Producto no encontrado\", () => pm.response.to.have.status(404));",
+									"pm.test(\"Devuelve el error correspondiente\", () => {",
+									"    pm.expect(pm.response.json().error).to.eql(\"No se Logro Encontrar el Producto\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Modificar/999999999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Modificar",
+								"999999999"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize Negra\",\n  \"descripcion\": \"Remera de algodon peinado - color negro\",\n  \"talle\": \"L\",\n  \"precio\": 18000.5,\n  \"stock\": 4,\n  \"imagen\": \"https://ejemplo.com/remera-negra.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Modificar Producto - OK (201)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 201 - Producto modificado\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Devuelve el mensaje de modificacion\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.include(\"Productos Modificados Correctamente\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Modificar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Modificar",
+								"{{productoId}}"
+							]
+						},
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"codigo\": \"{{codigo}}\",\n  \"nombre\": \"Remera Oversize Negra\",\n  \"descripcion\": \"Remera de algodon peinado - color negro\",\n  \"talle\": \"L\",\n  \"precio\": 18000.5,\n  \"stock\": 4,\n  \"imagen\": \"https://ejemplo.com/remera-negra.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					}
+				},
+				{
+					"name": "Listar Productos - Verifica la modificacion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"",
+									"const buscado = pm.response.json().find(p => p.codigo === pm.collectionVariables.get(\"codigo\"));",
+									"",
+									"pm.test(\"Los datos quedaron modificados en la base\", () => {",
+									"    pm.expect(buscado).to.be.an(\"object\");",
+									"    pm.expect(buscado.id).to.eql(Number(pm.collectionVariables.get(\"productoId\")));",
+									"    pm.expect(buscado.nombre).to.eql(\"Remera Oversize Negra\");",
+									"    pm.expect(buscado.talle).to.eql(\"L\");",
+									"    pm.expect(Number(buscado.precio)).to.eql(18000.5);",
+									"    pm.expect(buscado.stock).to.eql(4);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Productos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Productos"
+							]
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4 - Eliminar Producto",
+			"description": "Pruebas del metodo Eliminar Producto (DELETE /api/Eliminar/:id).",
+			"item": [
+				{
+					"name": "Eliminar Producto - Sin Token (401)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 401 - Ruta protegida\", () => pm.response.to.have.status(401));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Eliminar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Eliminar",
+								"{{productoId}}"
+							]
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				},
+				{
+					"name": "Eliminar Producto - Inexistente (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 404 - Producto no encontrado\", () => pm.response.to.have.status(404));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Eliminar/999999999",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Eliminar",
+								"999999999"
+							]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Producto - OK (201)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 201 - Producto eliminado\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Devuelve el mensaje de eliminacion\", () => {",
+									"    pm.expect(pm.response.json().Mensaje).to.include(\"Productos Eliminados Correctamente\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Eliminar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Eliminar",
+								"{{productoId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Producto - Ya eliminado (404)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 404 - El producto ya no existe\", () => pm.response.to.have.status(404));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Eliminar/{{productoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Eliminar",
+								"{{productoId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Listar Productos - Ya no contiene el eliminado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"El producto eliminado no aparece en la lista\", () => {",
+									"    const id = Number(pm.collectionVariables.get(\"productoId\"));",
+									"    pm.expect(pm.response.json().map(p => p.id)).to.not.include(id);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/Productos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"Productos"
+							]
+						},
+						"auth": {
+							"type": "noauth"
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "usuario",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "codigo",
+			"value": ""
+		},
+		{
+			"key": "productoId",
+			"value": ""
+		}
+	]
+}
