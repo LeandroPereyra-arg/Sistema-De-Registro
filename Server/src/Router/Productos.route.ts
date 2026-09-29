@@ -1,8 +1,11 @@
 import { Router } from "express";
-import {RegistrarProductos,ModificarProducto,EliminarProducto}from '../Controller/Productos'
+import {ListarProductos,RegistrarProductos,ModificarProducto,EliminarProducto}from '../Controller/Productos'
 import { VerificarToken } from "../Middleware/Auth";
 
 const Rutas=Router()
+
+// --> Cualquier usuario puede ver los productos
+Rutas.get('/Productos',ListarProductos)
 
 // --> Solo usuarios logueados pueden modificar productos
 Rutas.post('/Registrar',VerificarToken,RegistrarProductos)
